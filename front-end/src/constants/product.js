@@ -1,0 +1,17 @@
+export default [
+    "Clothing",
+    "Shoes",
+    "Accessories",
+    "Fitness products",
+    "Cosmetics/Perfumes",
+    "Books",
+    "Online courses",
+    "Home appliances",
+    "Electronics",
+    "Toys and games",
+    "Pet supplies",
+    "Home decor",
+    "Sports equipment",
+    "Outdoor gear",
+    "Health and wellness products",
+]

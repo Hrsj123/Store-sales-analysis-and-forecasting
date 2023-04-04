@@ -1,0 +1,2 @@
+First dataset:
+Store,Date,Weekly_Sales,Holiday_Flag,Temperature,Fuel_Price,CPI,Unemployment
