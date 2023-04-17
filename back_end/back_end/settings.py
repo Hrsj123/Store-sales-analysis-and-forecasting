@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # 'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -134,4 +136,9 @@ CORS_ORIGIN_WHITELIST = (
   'http://localhost:3000',
 )
 
-DATA_UPLOAD_MAX_MEMORY_SIZE = None
+# CSRF_TRUSTED_ORIGINS = [
+#     'http://localhost:3000/*',
+#     'http://localhost:8000/*',
+# ]
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None

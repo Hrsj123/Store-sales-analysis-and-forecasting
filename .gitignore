@@ -26,4 +26,7 @@ yarn-error.log*
 # backend:
 back_end/db.sqlite3
 __pycache__
-/_code
+/_code/*
+
+# tests
+*.ipynb

@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import math
 from math import sqrt
 
 import datetime
@@ -26,7 +25,7 @@ walmart.info()
 
 # Converting 'Date' column to datetime and adding 'Year', 'Month' and 'Week' column
 
-walmart["Date"] = pd.to_datetime(walmart["Date"])
+walmart["Date"] = pd.to_datetime(walmart["date"])
 walmart['Year'] = walmart['Date'].dt.year
 walmart['Month'] = walmart['Date'].dt.month 
 walmart['Week'] = walmart['Date'].dt.week
@@ -45,25 +44,25 @@ walmart.isnull().sum()
 
 walmart.duplicated().sum()                                                                                      
 
-walmart.groupby('Month')['Weekly_Sales'].mean()
+walmart.groupby('Month')['weekly_sales'].mean()
 
-walmart.groupby('Year')['Weekly_Sales'].mean()
+walmart.groupby('Year')['weekly_sales'].mean()
 
 # Data Visualization
 
 # Analyzing the distribution of target variable
 plt.figure(figsize = (10, 5))
-sns.distplot(walmart['Weekly_Sales'], hist_kws=dict(edgecolor="black"))
+sns.distplot(walmart['weekly_sales'], hist_kws=dict(edgecolor="black"))
 plt.title('Weekly Sales Distribution', fontsize= 15)
 plt.grid()
 plt.show()
 
-walmart['Holiday_Flag'].value_counts()
+walmart['holiday_flag'].value_counts()
 
-sns.countplot(x = 'Holiday_Flag', data = walmart);
+sns.countplot(x = 'holiday_flag', data = walmart);
 
 plt.figure(figsize=(20,8))
-sns.barplot(walmart['Store'], walmart['Weekly_Sales'])
+sns.barplot(walmart['store_no'], walmart['weekly_sales'])
 plt.title('Weekly Sales by Store', fontsize=18)
 plt.ylabel('Sales', fontsize=16)
 plt.xlabel('Store', fontsize=16)
@@ -77,7 +76,7 @@ def graph_relation_to_weekly_sale(col_relation, df, x='Week', palette=None):
 
     sns.relplot(
         x=x,
-        y='Weekly_Sales',
+        y='weekly_sales',
         hue=col_relation,
         data=df,
         kind='line',
@@ -87,10 +86,10 @@ def graph_relation_to_weekly_sale(col_relation, df, x='Week', palette=None):
     )
     plt.show()
 
-graph_relation_to_weekly_sale('Year', walmart, x='Date', palette='Set2')
+graph_relation_to_weekly_sale('Year', walmart, x='date', palette='Set2')
 
 plt.figure(figsize = (20, 7))
-sns.barplot(walmart['Weekly_Sales'])
+sns.barplot(walmart['weekly_sales'])
 # walmart['Week'],
 plt.title('Average Weekly Sales', fontsize=18)
 plt.ylabel('Weekly Sales', fontsize=16)
@@ -102,12 +101,14 @@ plt.figure(figsize = (20,10))
 sns.heatmap(walmart.corr(), cmap = 'PuBu', annot = True)
 plt.show()
 
-walmart.drop(['Temperature', 'Fuel_Price', 'CPI', 'Unemployment'], axis = 1, inplace = True)
+walmart.drop(['temperature', 'fuel_price', 'cpi', 'unemployment'], axis = 1, inplace = True)
 
-x = walmart.drop(['Date','Weekly_Sales'], axis=1)
+x = walmart.drop(['date','weekly_sales'], axis=1)
 x
 
-y = walmart['Weekly_Sales']
+y = walmart['weekly_sales']
+
+print('-------------- Random Forest Test ----------------')
 
 rf = RandomForestRegressor(n_estimators = 100)
 rf.fit(x, y)
@@ -118,6 +119,8 @@ plt.figure(figsize = (15, 5))
 plt.bar(x.columns, rf.feature_importances_)
 plt.title("Feature Importance", fontsize = 15)
 plt.show()
+
+print('-------------- Linear Regression Test ----------------')
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size = 0.8, random_state = 0)
 
@@ -133,6 +136,7 @@ print("R2 Score: ", r2_score(y_test, y_pred))
 print("MSE Score: ", mean_squared_error(y_test, y_pred))
 print("RMSE : ", sqrt(mean_squared_error(y_test, y_pred)))
 
+print('-------------- Decision Tree Test ----------------')
 # Decision Tree
 dtree = DecisionTreeRegressor()
 dtree.fit(x_train, y_train)
