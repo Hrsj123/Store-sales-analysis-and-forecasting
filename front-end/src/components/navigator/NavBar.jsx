@@ -2,7 +2,7 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+// import NavDropdown from 'react-bootstrap/NavDropdown';
 import * as routes from '../../constants/routes';
 
 function NavBar() {
@@ -14,8 +14,10 @@ function NavBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href={routes.default.homepageRoute}>Home</Nav.Link>
+            <Nav.Link href={routes.default.addEntryRoute}>Add Entry</Nav.Link>
             <Nav.Link href={routes.default.getInputRoute}>Add Dataset</Nav.Link>
             <Nav.Link href={routes.default.analysisRoute}>Analysis</Nav.Link>
+            <Nav.Link href={routes.default.predictRoute}>Predict</Nav.Link>
             {/* 
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

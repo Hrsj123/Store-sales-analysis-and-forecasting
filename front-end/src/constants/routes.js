@@ -1,5 +1,7 @@
 export default {
     homepageRoute: '/',
+    addEntryRoute: '/addEntry',
     getInputRoute: '/getCsvInput',
-    analysisRoute: '/analysis'
+    analysisRoute: '/analysis',
+    predictRoute: '/predict',
 }

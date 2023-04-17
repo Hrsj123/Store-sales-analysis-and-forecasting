@@ -1,10 +1,13 @@
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
-import HomePage from './components/HomePage';
-import Analysis from './components/Analysis';
-import React from 'react';
-import GetInput from './components/GetInput';
 import * as constants from './constants/routes';
+// Views
+import HomePage from './views/HomePage';
+import StoreInput from './views/StoreInput';
+import GetInput from './views/GetInput';
+import Analysis from './views/Analysis';
+import Predict from './views/Predict';
 
 function App() {
 
@@ -19,12 +22,20 @@ function App() {
           element={<HomePage />} 
         />
         <Route 
+          path={constants.default.addEntryRoute} 
+          element={<StoreInput />} 
+        />
+        <Route 
           path={constants.default.getInputRoute} 
           element={<GetInput />} 
         />
         <Route 
           path={constants.default.analysisRoute} 
           element={<Analysis />} 
+        />        
+        <Route 
+          path={constants.default.predictRoute} 
+          element={<Predict />} 
         />        
       </Route>
     </Routes>
