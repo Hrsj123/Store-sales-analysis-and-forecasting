@@ -1,16 +1,14 @@
-import pandas as pd
-from rest_framework import viewsets, views, status
-from rest_framework.response import Response
-import xgboost as xgb
-from .models import WalmartStore
-from .serializers import StoreAvgWeeklySalesComparePlotSerializer, StoreWeeklyRevenuePlotSerializer, WalmartStoreSerializer
-from django.db import transaction
-from .utils import ml_algorithms as algos
 import os
-import numpy as np
+import pandas as pd
+from django.db import transaction
+from rest_framework import viewsets, views, status, mixins
+from rest_framework.response import Response
+from .models import *
+from .serializers import *
+from .utils import ml_algorithms as algos
 from .utils.methods import load_model, load_data
 from .utils.constants import MODEL_FILE_NAME
-from sklearn.preprocessing import LabelEncoder
+
 
 class WalmartStoreViewset(viewsets.ModelViewSet):
     queryset = WalmartStore.objects.all()
@@ -45,35 +43,28 @@ class WalmartStoreViewset(viewsets.ModelViewSet):
         algos.xg_boost_algorithm(path_to_models, x_train, x_test, y_train, y_test)
 
         return Response(serializer.validated_data, status=status.HTTP_201_CREATED)
-
         
-# Plots:
-# 1. for each store Store -> (x: week vs y: weekly sales)
-# 2. for x: store vs y: avg. weekly_sales
-# 3. ml plot: 
-    # -> Scatter plot of all diff algos
-    # -> Accuracy plots -> r2 score, mse score, rmse            (all algos score -> pie chart)    # Plots remaining
+# Plots Idea:
+# Idea yet to be implemented! -> Product sold pie-chart for each shop!
 
-class StoreWeeklyRevenuePlotView(views.APIView): # Plot 1    
+# Plots
+class StoreWeeklyRevenuePlotView(views.APIView): 
     def get(self, request, format=None):
         param_store_no = request.query_params.get('store-no')
         if not param_store_no:
             return Response('Please provide a query parameter with key of "store-no"', status=status.HTTP_400_BAD_REQUEST)
         queryset = WalmartStore.objects.filter(store_no=param_store_no).values('date', 'weekly_sales')
-        ser = StoreWeeklyRevenuePlotSerializer(queryset, many=True) # convert date to week!
+        ser = StoreWeeklyRevenuePlotSerializer(queryset, many=True) 
         return Response(ser.data[0])
     
-class StoreAvgWeeklySalesComparePlotView(views.APIView): # Plot 2
+
+class StoreAvgWeeklySalesComparePlotView(views.APIView): 
     def get(self, request, format=None):
         queryset = WalmartStore.objects.all().values('store_no', 'weekly_sales')
         ser = StoreAvgWeeklySalesComparePlotSerializer(queryset, many=True)
         return Response(ser.data[0])
-    
-class ScatterPlotView(views.APIView):
-    def get(self, request, format=None):
-        pass
 
-
+# Predict
 class PredictView(views.APIView):       
 
     def get(self, request, format=None):
@@ -112,3 +103,62 @@ class PredictView(views.APIView):
 
         return Response(res)
     
+# The next 2 views can be created at once using genericViewset and (get and post)
+# class GetProduct(views.APIView):
+
+#     def get(self, request, format=None):
+#         products = Product.objects.all()
+#         ser = ProductSerializer(data=products, many=True)
+#         return ser.data
+
+class ProductView(views.APIView):
+    
+    def get(self, request, format=None):
+        ser = ProductSerializer(Product.objects.all(), many=True)
+        return Response(ser.data)
+
+# incomplete!
+        
+
+    # ------------------------------------------------------------------------ option 1
+# class AddStoreView(views.APIView):
+#     # queryset = Product.objects.all()
+#     # serializer_class = ProductSerializer
+    
+#     def post(self, request):             # Re-define to create store records!
+#         # storeNumber = request.query_params.get('storeNumber')
+#         # if not storeNumber:
+#         #     return Response('Provide the store number!', status=status.HTTP_400_BAD_REQUEST )
+#         # data = list(map(lambda x: list(x.split('$')), request.data))
+#         serializer = WalmartSalesSerializer(data=request.data)
+#         print('--------------------------')
+#         print(serializer.data)
+#         print('--------------------------')
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         # storeNumber = request.query_params.get('storeNumber')
+#         # if not storeNumber:
+#         #     return Response('Provide the store number!', status=status.HTTP_400_BAD_REQUEST )
+#         # print('----------------------')
+#         # print(storeNumber)
+#         # data = list(map(lambda x: list(x.split('$')), request.data))
+#         # print(data)
+#         # print('----------------------')
+#         # ser = WalmartSalesSerializer(data=data, many=True)
+#         # if ser.is_valid():
+#         #     print(ser.data)
+#         #     # ser.save()
+#         #     return Response(ser.data, status=status.HTTP_201_CREATED)
+#         # print('----------------------')
+
+#         return Response(ser.data, status=status.HTTP_201_CREATED)
+        
+
+        # ---------------------------------------------- option 2
+# class AddStoreViewset(viewsets.ModelViewSet):
+#     queryset = WalmartSales.objects.all()
+#     serializer_class = WalmartSalesSerializer
+#     lookup_field = 'id'
+#     ordering_fields = ['Store']

@@ -1,91 +1,71 @@
-import React, { useEffect, useState, useRef } from 'react'
-import * as const_api_endpoints from '../constants/api_endpoints'
-import product, * as products from '../constants/product'
-import AddProductCard from '../components/AddProductCard';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Form from 'react-bootstrap/Form';
+import React, { useEffect, useState, useRef } from 'react';
+import * as const_api_endpoints from '../constants/api_endpoints';
+import ProductForm from '../components/ProductForm';
+import getCookie from '../script'
 
 const StoreInput = () => {
 
     const effectRan = useRef(false);
-    const [data, setData] = useState(null);
-    const [productList, setProductList] = useState({});
+    const effectRan2 = useRef(false);
+    const [products, setProducts] = useState(null);     
+    const [productList, setProductList] = useState(null);   
+    const [storeNumber, setStoreNumber] = useState(0);   
 
+    // Get products -> Fetch
     useEffect(() => {
         if (!effectRan.current) {
-            fetch(`api/${const_api_endpoints.default.storeData}`)
+            fetch(`${const_api_endpoints.default.baseUrl}${const_api_endpoints.default.products}`)
                 .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    setData(data);
-                })
-                .catch((err) => {
-                    console.error('Unable to parse the data with error: ', err);
-                });
-            return () => {
+                .then(data => setProducts(data))
+                .catch((err) => console.error('Unable to parse the data with error: ', err));
+                return () => {
                 effectRan.current = true;
             }
         }
     }, []);
 
-    
-    const handleProductDropdown = (product) => {
-        setProductList({                
-            ...productList,
-            ...{ [product['product']]: 1}
-        })
-    }
+    useEffect(() => {   
+        if (productList && storeNumber) {
+            if (!effectRan2.current) {
+                // Format response:
+                const postProducts = productList.map(prod => `${prod.product.name}$${prod.quantity}`);
+                console.log(postProducts);
+                fetch(const_api_endpoints.default.baseUrl + const_api_endpoints.default.products + `?storeNumber=${storeNumber}`, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": getCookie('csrftoken')
+                    },
+                    body: JSON.stringify(postProducts)
+                })
+                    .then(res => res.json())
+                    .then(data => console.log(data))
+                    .catch(err => console.error(err));
+                return () => {
+                    effectRan2.current = true;
+                }
+            }
+        }
+        
+    }, [productList, storeNumber]);
 
-    const handleQuantityChange = (quantity) => {
-        console.log('--------------');
-        console.log(quantity);
-        console.log('--------------');
-        setProductList({
-            ...productList,
-            ...{ [product['product']]: quantity }
-        })
+    const onAddProduct = (addedProduct, storeNumber) => {
+        setStoreNumber(storeNumber);
+        setProductList(addedProduct);       
     }
-    
-    useEffect(() => {
-        console.log(productList);
-    }, [productList])
 
     return (
-        <div className='container'>;
-            <h1>Homepage</h1>
-            <h1>This page: Relation betn weekly dataset and products(at an instance)!</h1>
-            <h1>Responsive design for mobile</h1>
-            <Form className="mt-3">
-                <Form.Group className="mb-3 row" controlId="formBasicEmail">
-                    <Dropdown className='col-3'>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            Dropdown Button
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu 
-                            style={{
-                                height: "205px",
-                                overflowY: "scroll"
-                            }}
-                        >
-                            {
-                                products.default.map( (product, index) => 
-                                    <Dropdown.Item 
-                                        key={ index }  
-                                        href="#/action-3"
-                                        onClick={() => handleProductDropdown({ product })}
-                                        >
-                                        { product }
-                                    </Dropdown.Item>
-                                )
-                            }
-                        </Dropdown.Menu>
-                    </Dropdown>
-                    {/* <div className="col-3">
-                        <Form.Control type="number" placeholder="quantity" onChange={() => handleQuantityChange()}/>
-                    </div> */}
-                </Form.Group>
-            </Form>
+        <div className='container mt-3'>
+            <h2 className='text-center mb-4'>Add product data</h2>
             {/* <AddProductCard /> */}
+            {
+                products &&
+                <ProductForm 
+                    products={products} 
+                    onAddProduct={onAddProduct} 
+                />
+            }
         </div>
     )
 }

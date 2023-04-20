@@ -8,5 +8,6 @@ export default {
     avgSalesProfit: 'compareStoresAvgWeeklySale/',
     // Predict weekly_sale
     weeklySalePrediction: 'predictValue/',
-    // Scatter plots
+    // Products get and create
+    products: 'products/',
 }

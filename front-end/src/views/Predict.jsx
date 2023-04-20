@@ -111,7 +111,7 @@ const Predict = () => {
                     <td className='align-middle'>{value.r2Score}</td>
                     <td className='align-middle'>{value.mseScore}</td>
                     <td className='align-middle'>{value.rmseScore}</td>
-                    <td className='align-middle'>  
+                    <td className='align-middle p-0'>  
                       <ScatterPlot 
                           x_array={value.y_test}
                           y_array={value.y_pred}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import * as const_api_endpoints from '../constants/api_endpoints'
-import Plotter from '../components/Plotter'
+import LineGraph from '../components/LineGraph'
 
 const Analysis = () => {
   const effectRan = useRef();
@@ -41,9 +41,9 @@ const Analysis = () => {
   }, []);
 
   return (
-    <div className='container mt-3'>
-      <h1 className='text-center'>Analysis</h1>
-      
+    <div className='container'>
+      <h1 className='text-center mt-3'>Analysis</h1>
+
       {/* Form to take store number input! */}
       {
         !isSubmitted &&
@@ -63,10 +63,10 @@ const Analysis = () => {
         </div>
       }
 
-      {
+      {     /* Add an outer card background */
         plotData &&
-        <>
-          <Plotter 
+        <div>
+          <LineGraph 
             x_array={plotData['dates']}
             y_array={plotData['weekly_sales']}
             color='green'
@@ -75,7 +75,7 @@ const Analysis = () => {
             y_title='Sales Profit'
             width={550}
           />
-          <Plotter 
+          <LineGraph 
             x_array={avgPlotData['store_no']}
             y_array={avgPlotData['avg_sales']}
             color='orange'
@@ -84,7 +84,7 @@ const Analysis = () => {
             y_title='Avg Sales Profit'
             width={550}
           />
-        </>
+        </div>
       }
     </div>
   )

@@ -10,11 +10,13 @@ class WalmartStoreSerializer(serializers.ModelSerializer):
         model = WalmartStore
         exclude = ('id',)
 
+
 class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
         exclude = ('id',)
+
 
 class WalmartSalesSerializer(serializers.ModelSerializer):
 
@@ -70,9 +72,8 @@ class StoreAvgWeeklySalesComparePlotListSerializer(serializers.ListSerializer):
 
 class StoreAvgWeeklySalesComparePlotSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = WalmartStore
-        fields = ('store_no', 'avg_field')
-        list_serializer_class = StoreAvgWeeklySalesComparePlotListSerializer
+    model = WalmartStore
+    fields = ('store_no', 'avg_field')
+    list_serializer_class = StoreAvgWeeklySalesComparePlotListSerializer
 
     

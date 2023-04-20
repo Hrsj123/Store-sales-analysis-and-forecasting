@@ -1,6 +1,7 @@
 from django.db import models
 from .utils.constants import HOLIDAY_CHOICES
 from django.core.validators import MaxValueValidator
+from django.utils import timezone
 
 class WalmartStore(models.Model):
     store_no = models.CharField('Store no', max_length=2)
@@ -29,11 +30,13 @@ class Product(models.Model):
     def __str__(self) -> str:
         return self.name
 
-class WalmartSales(models.Model):
+# Will accumulate data for a week and push it in the Walmart Store above! -> Incomplete!
+class WalmartSales(models.Model):           # A relationship table between WalmartStore and Product
     store = models.ForeignKey(WalmartStore, on_delete=models.PROTECT, related_name='store', verbose_name='store')
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='product', verbose_name='product')
-    date_time = models.DateTimeField('Date time', null=True)
-    isHoliday = models.BooleanField('Holiday', max_length=1, choices=HOLIDAY_CHOICES, default=False)
+    quantity = models.PositiveSmallIntegerField(null=True)
+    date_time = models.DateTimeField('Date time', null=True, default=timezone.now)    
+    isHoliday = models.BooleanField('Holiday', max_length=1, choices=HOLIDAY_CHOICES, default=False)   # from datetime
 
     class Meta:
         ordering = ['pk']

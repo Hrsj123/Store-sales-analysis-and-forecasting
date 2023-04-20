@@ -38,7 +38,7 @@ const ScatterPlot = (props) => {
             l: 45,
             r: 5,
             b: 50,
-            t: 40,
+            t: 45,
             // pad: 0,
         }   
     }
@@ -58,7 +58,7 @@ const ScatterPlot = (props) => {
 
 ScatterPlot.defaultProps = {
     width: 300,
-    height: 250,
+    height: 260,
     color: 'orange',
 }
 
