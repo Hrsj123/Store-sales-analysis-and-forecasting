@@ -8,6 +8,8 @@ const Analysis = () => {
   const [plotData, setPlotData] = useState(null);
   const [avgPlotData, setAvgPlotData] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [minRange, setMinRange] = useState(0);
+  const [maxRange, setMaxRange] = useState(Infinity);
 
 
   const handleInput = (e) => {
@@ -19,11 +21,19 @@ const Analysis = () => {
 
   const handleSubmit = () => {
     if (storeInput === '') return alert('Enter a store number');
-
+    if (storeInput < 1 || storeInput > 45) {
+      setStoreInput('');
+      return alert('Store with the entered number does not exist!');
+    };
     setIsSubmitted(true);
     fetch(const_api_endpoints.default.baseUrl + const_api_endpoints.default.storeWeeklySale + `?store-no=${storeInput}`)
       .then(res => res.json())
-      .then(data => setPlotData(data))
+      .then(data => {
+        const [min, max] = [Math.min(...data['weekly_sales']), Math.max(...data['weekly_sales'])];
+        setMinRange(minRange < min ? minRange : min);
+        setMaxRange(maxRange > max ? maxRange : max);        
+        return setPlotData(data);
+      })
       .catch(err => console.error(err));
   }
 
@@ -31,7 +41,11 @@ const Analysis = () => {
     if (!effectRan.current) {
       fetch(const_api_endpoints.default.baseUrl + const_api_endpoints.default.avgSalesProfit)
         .then(res => res.json())
-        .then(data => setAvgPlotData(data))
+        .then(data => {
+          setMinRange(Math.min(...data['avg_sales']));
+          setMaxRange(Math.max(...data['avg_sales']));
+          return setAvgPlotData(data);
+        })
         .catch(err => console.error(err));
 
         return () => {
@@ -74,7 +88,9 @@ const Analysis = () => {
             x_title='Weeks'
             y_title='Sales Profit'
             width={550}
-          />
+            minRange={minRange}
+            maxRange={maxRange}
+            />
           <LineGraph 
             x_array={avgPlotData['store_no']}
             y_array={avgPlotData['avg_sales']}
@@ -83,6 +99,8 @@ const Analysis = () => {
             x_title='Store number'
             y_title='Avg Sales Profit'
             width={550}
+            minRange={minRange}
+            maxRange={maxRange}
           />
         </div>
       }

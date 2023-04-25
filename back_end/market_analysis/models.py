@@ -43,3 +43,7 @@ class WalmartSales(models.Model):           # A relationship table between Walma
 
     def __str__(self) -> str:
         return f'{self.store.store_no} | {self.date_time}'
+
+    def save(self, *args, **kwargs) -> None:
+        self.isHoliday = True if self.date_time.weekday() > 4 else False    # weekday of '5', '6' implies saturday & sunday
+        return super().save(self, *args, **kwargs) 

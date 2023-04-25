@@ -11,12 +11,14 @@ const Plotter = (props) => {
         },
     ]
 
+
     const layout = {
         width: props.width, 
         height: props.height, 
         title: props.title,
         xaxis: {
             title: props.x_title,
+            // range: [],
             nticks: 15,
             tickfont: {
                 size: 1,
@@ -24,6 +26,7 @@ const Plotter = (props) => {
         },
         yaxis: {
             title: props.y_title,
+            range: [props.minRange + (props.minRange * 0.05), props.maxRange + (props.maxRange * 0.05)],
             nticks: 10,
             tickfont: {
                 size: 10,
@@ -51,33 +54,3 @@ Plotter.defaultProps = {
 }
 
 export default Plotter
-
-
-// Samples plotter referred: 
-    // <Plot
-    //     data={[
-    //       {
-    //         x: plotData['dates'],
-    //         y: plotData['weekly_sales'],
-    //         type: 'scatter',
-    //         // mode: 'lines+markers',
-    //         marker: {color: 'green'},
-    //       },
-    //       // {type: 'bar', x: plotData['dates'], y: plotData['weekly_sales']},
-    //     ]}
-    //     layout={{
-    //       width: 700, 
-    //       height: 500, 
-    //       title: `Store no. ${ storeInput } sales profit`,
-    //       xaxis: {
-    //         title: 'Weeks',
-    //         // range: [0, 15],
-    //         nticks: 15,
-    //       },
-    //       yaxis: {
-    //         title: 'Sales Profit',
-    //         // range: [0, 10],
-    //         nticks: 10
-    //       },
-    //     }}
-    //   />

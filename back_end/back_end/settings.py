@@ -86,6 +86,18 @@ DATABASES = {
     }
 }
 
+# ------------- Scheduler ---------------
+# Q_CLUSTER = {
+#     'name': 'myproject',
+#     'workers': 4,
+#     'recycle': 500,
+#     'timeout': 60,
+#     'retry': 180,
+#     'queue_limit': 500,
+#     'bulk': 10,
+#     'orm': 'default',
+# }
+# ---------------------------------------
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

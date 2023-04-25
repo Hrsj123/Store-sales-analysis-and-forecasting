@@ -72,8 +72,9 @@ class StoreAvgWeeklySalesComparePlotListSerializer(serializers.ListSerializer):
 
 class StoreAvgWeeklySalesComparePlotSerializer(serializers.ModelSerializer):
 
-    model = WalmartStore
-    fields = ('store_no', 'avg_field')
-    list_serializer_class = StoreAvgWeeklySalesComparePlotListSerializer
+    class Meta:
+        model = WalmartStore
+        fields = ('store_no', 'avg_field')
+        list_serializer_class = StoreAvgWeeklySalesComparePlotListSerializer
 
     

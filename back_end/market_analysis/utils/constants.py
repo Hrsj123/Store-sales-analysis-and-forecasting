@@ -4,9 +4,9 @@ HOLIDAY_CHOICES = [
 ]
 
 MODEL_FILE_NAME = {
-    'Decision Tree': 'decision_tree_model.sav',
-    'knn_prediction': 'knn_model.sav',
     'Linear Regression': 'linear_regression_model.sav',
+    'knn_prediction': 'knn_model.sav',
+    'Decision Tree': 'decision_tree_model.sav',
     'Random Forest': 'random_forest_model.sav',
     'XGBoost': 'xgboost_model.sav',
 }
