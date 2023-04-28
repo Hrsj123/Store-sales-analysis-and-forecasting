@@ -103,13 +103,6 @@ class PredictView(views.APIView):
 
         return Response(res)
     
-# The next 2 views can be created at once using genericViewset and (get and post)
-# class GetProduct(views.APIView):
-
-#     def get(self, request, format=None):
-#         products = Product.objects.all()
-#         ser = ProductSerializer(data=products, many=True)
-#         return ser.data
 
 class ProductView(views.APIView):
     
@@ -117,48 +110,25 @@ class ProductView(views.APIView):
         ser = ProductSerializer(Product.objects.all(), many=True)
         return Response(ser.data)
 
-# incomplete!
         
-
-    # ------------------------------------------------------------------------ option 1
-# class AddStoreView(views.APIView):
-#     # queryset = Product.objects.all()
-#     # serializer_class = ProductSerializer
+class AddStoreView(views.APIView):
     
-#     def post(self, request):             # Re-define to create store records!
-#         # storeNumber = request.query_params.get('storeNumber')
-#         # if not storeNumber:
-#         #     return Response('Provide the store number!', status=status.HTTP_400_BAD_REQUEST )
-#         # data = list(map(lambda x: list(x.split('$')), request.data))
-#         serializer = WalmartSalesSerializer(data=request.data)
-#         print('--------------------------')
-#         print(serializer.data)
-#         print('--------------------------')
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#         # storeNumber = request.query_params.get('storeNumber')
-#         # if not storeNumber:
-#         #     return Response('Provide the store number!', status=status.HTTP_400_BAD_REQUEST )
-#         # print('----------------------')
-#         # print(storeNumber)
-#         # data = list(map(lambda x: list(x.split('$')), request.data))
-#         # print(data)
-#         # print('----------------------')
-#         # ser = WalmartSalesSerializer(data=data, many=True)
-#         # if ser.is_valid():
-#         #     print(ser.data)
-#         #     # ser.save()
-#         #     return Response(ser.data, status=status.HTTP_201_CREATED)
-#         # print('----------------------')
+    def post(self, request):             # Re-define to create store records!
+        storeNumber = request.query_params.get('storeNumber')
+        if not storeNumber:
+            return Response('Provide the store number!', status=status.HTTP_400_BAD_REQUEST )
+        data = list(map(
+            lambda x: {
+                'store_no': storeNumber, 
+                'product': Product.objects.get(name=x.split('$')[0]).id, 
+                'quantity': int(x.split('$')[1]),
+            }, 
+            request.data
+        ))
+        serializer = WalmartSalesSerializer(data=data, many=True)
 
-#         return Response(ser.data, status=status.HTTP_201_CREATED)
-        
-
-        # ---------------------------------------------- option 2
-# class AddStoreViewset(viewsets.ModelViewSet):
-#     queryset = WalmartSales.objects.all()
-#     serializer_class = WalmartSalesSerializer
-#     lookup_field = 'id'
-#     ordering_fields = ['Store']
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

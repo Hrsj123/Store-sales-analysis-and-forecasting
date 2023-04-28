@@ -30,7 +30,7 @@ const StoreInput = () => {
                 // Format response:
                 const postProducts = productList.map(prod => `${prod.product.name}$${prod.quantity}`);
                 console.log(postProducts);
-                fetch(const_api_endpoints.default.baseUrl + const_api_endpoints.default.products + `?storeNumber=${storeNumber}`, {
+                fetch(const_api_endpoints.default.baseUrl + const_api_endpoints.default.sales + `?storeNumber=${storeNumber}`, {
                     method: 'POST',
                     mode: 'cors',
                     headers: {

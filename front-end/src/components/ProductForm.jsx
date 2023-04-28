@@ -159,7 +159,7 @@ const ProductForm = ({ products, onAddProduct }) => {
             <hr />
             {   // On confirm add! 
                 (selectedProducts.length !== 0) &&
-                    <div className="">
+                    <div className="mb-3">
                         {
                             selectedProducts.map((product, index) => 
                                 <span key={index}>

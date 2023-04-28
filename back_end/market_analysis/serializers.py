@@ -30,8 +30,6 @@ class StoreWeeklyRevenuePlotListSerializer(serializers.ListSerializer):
     def to_representation(self, data):
         dates, weekly_sales = [], []
         for i in data:
-            # date_obj = dt.strptime(i['date'], '%d-%m-%Y').date()
-            # dates.append(date_obj.isocalendar()[1])
             dates.append(i['date'])
             weekly_sales.append(i['weekly_sales'])
 

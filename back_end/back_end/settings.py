@@ -40,11 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
-    # 'django.middleware.common.CommonMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -86,18 +87,6 @@ DATABASES = {
     }
 }
 
-# ------------- Scheduler ---------------
-# Q_CLUSTER = {
-#     'name': 'myproject',
-#     'workers': 4,
-#     'recycle': 500,
-#     'timeout': 60,
-#     'retry': 180,
-#     'queue_limit': 500,
-#     'bulk': 10,
-#     'orm': 'default',
-# }
-# ---------------------------------------
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -148,9 +137,13 @@ CORS_ORIGIN_WHITELIST = (
   'http://localhost:3000',
 )
 
-# CSRF_TRUSTED_ORIGINS = [
-#     'http://localhost:3000/*',
-#     'http://localhost:8000/*',
-# ]
-
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+# ---------- Can schedule this way as well ! ---------
+
+# CELERY_BEAT_SCHEDULE = {
+#     "scheduled_task": {
+#         "task": "market_analysis.tasks.add_product_data_weekly",
+#         "schedule": 5.0 * 60 * 30 * 24 * 7,                # in secs -> 1 week
+#     },
+# }

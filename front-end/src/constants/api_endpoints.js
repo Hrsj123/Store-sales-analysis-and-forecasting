@@ -10,4 +10,6 @@ export default {
     weeklySalePrediction: 'predictValue/',
     // Products get and create
     products: 'products/',
+    // Store product sales data
+    sales: 'addSales/',
 }
