@@ -25,6 +25,13 @@ def load_model(X_new, filename):
     walmart_store_model = WalmartStore.objects.all()
     dataset = walmart_store_model.values('store_no', 'holiday_flag', 'date', 'weekly_sales')     # Add here!
     dataset_df = pd.DataFrame(dataset)
+
+
+    #
+    print('------------------------------------------------')
+    print(dataset_df.head())
+    print('------------------------------------------------')
+    #
     
     # split dataset
     x_test_df = dataset_df[['store_no', 'holiday_flag', 'date']]
@@ -68,7 +75,7 @@ def load_data():        # Used to train / re-reain ml models
     
     # Will raise error if x_df, y_df has data less than the min split percentage!
     x_train, x_test, y_train, y_test = 0, 0, 0, 0
-    try:
+    try:                                         
         x_train, x_test, y_train, y_test = train_test_split(x_df, y_df, train_size = 0.8, random_state = 0)
     except:
         print(len(x_df), len(y_df))

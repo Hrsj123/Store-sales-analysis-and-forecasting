@@ -1,6 +1,6 @@
 HOLIDAY_CHOICES = [
-    ('0', 'Workingday'),
-    ('1', 'Holiday'),
+    ('0', 'Workingday'),    # Working!
+    ('1', 'Holiday'),       # Holiday Week!
 ]
 
 MODEL_FILE_NAME = {

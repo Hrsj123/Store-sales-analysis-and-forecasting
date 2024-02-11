@@ -17,6 +17,7 @@ function NavBar() {
             <Nav.Link href={routes.default.addEntryRoute}>Add Entry</Nav.Link>
             <Nav.Link href={routes.default.getInputRoute}>Add Dataset</Nav.Link>
             <Nav.Link href={routes.default.analysisRoute}>Analysis</Nav.Link>
+            <Nav.Link href={routes.default.InventoryRoute}>Inventory</Nav.Link>
             <Nav.Link href={routes.default.predictRoute}>Predict</Nav.Link>
             {/* 
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">

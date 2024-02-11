@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator
 from django.utils import timezone
 import random
 
-class WalmartStore(models.Model):
+class WalmartStore(models.Model):       # Holds each weeks, transactions actually!!!
     store_no = models.CharField('Store no', max_length=2)
     date = models.CharField('Date', max_length=10)                                          # Should be date field
     weekly_sales = models.DecimalField('Weekly Sales', max_digits=12, decimal_places=2)
@@ -30,6 +30,19 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+class ProductStock(models.Model):       
+    # store = models.ForeignKey(WalmartStore, on_delete=models.CASCADE, related_name='+', verbose_name='Store')
+    store = models.PositiveSmallIntegerField('Store No.')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='+', verbose_name='Product')
+    quantity = models.PositiveIntegerField('Quantity')
+
+    class Meta:
+        ordering = ['pk']
+        unique_together = ('store', 'product')
+
+    def __str__(self) -> str:
+        return f'{self.store} | {self.product.name}'
 
 # Will accumulate data for a week and push it in the Walmart Store above! -> Incomplete!
 class WalmartSales(models.Model):           # A relationship table between WalmartStore and Product

@@ -7,6 +7,7 @@ import HomePage from './views/HomePage';
 import StoreInput from './views/StoreInput';
 import GetInput from './views/GetInput';
 import Analysis from './views/Analysis';
+import Inventory from './views/Inventory';
 import Predict from './views/Predict';
 
 function App() {
@@ -32,6 +33,10 @@ function App() {
         <Route 
           path={constants.default.analysisRoute} 
           element={<Analysis />} 
+        />        
+        <Route 
+          path={constants.default.InventoryRoute} 
+          element={<Inventory />} 
         />        
         <Route 
           path={constants.default.predictRoute} 

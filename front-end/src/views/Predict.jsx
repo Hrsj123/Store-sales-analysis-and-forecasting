@@ -25,9 +25,7 @@ const Predict = () => {
           .then(res => res.json())
           .then(data => {
             setResponse(data);
-            console.log('Apples!');
             setResponseReceived(true);
-            console.log('Mangoes!');
           })
           .catch(err => console.error(err));
         

@@ -14,3 +14,5 @@ class ProductAdmin(ImportExportModelAdmin):
 @admin.register(WalmartSales)
 class WalmartSalesAdmin(ImportExportModelAdmin):
     resource_class = WalmartSalesResource
+
+admin.site.register(ProductStock)

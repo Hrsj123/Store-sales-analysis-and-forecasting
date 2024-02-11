@@ -110,16 +110,66 @@ class ProductView(views.APIView):
         ser = ProductSerializer(Product.objects.all(), many=True)
         return Response(ser.data)
 
+class ProductListView(views.APIView):
+    def get(self, request):
+        store_number = request.query_params.get('store-no')
+        if not store_number:
+            return Response({'message': 'Pass the store number'}, status=status.HTTP_400_BAD_REQUEST)
+        instances = ProductStock.objects.filter(store=int(store_number))
+
+        res = [{
+            'title': instance.product.name,
+            'description': instance.product.description,
+            'quantity': instance.quantity,
+            'price': instance.product.selling_price
+        } for instance in instances]
+        return Response(res)
+
+class RestockView(views.APIView):
+    def get(self, request):
+        product_name = request.GET.get('product-name')
+        curr_store = request.query_params.get('store-no')
+        if not product_name:
+            return Response({'message': 'Product name is not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        product = Product.objects.get(name=product_name)
+        restockable_stocks = ProductStock.objects.filter(product=product.id).exclude(store=curr_store)
+        res = [{
+            'store': stock.store,
+            'quantity': stock.quantity
+        } for stock in restockable_stocks]
+        return Response(res)
+
+    def post(self, request):
+        pass
         
+class RestockSetView(views.APIView):
+    def get(self, request):
+        quantity_to_restock = request.GET.get('quantity')
+        from_store = request.GET.get('from-store')
+        to_store = request.GET.get('to-store')
+        product_to_restock = request.GET.get('product-name')
+        if not quantity_to_restock or not from_store or not product_to_restock or not to_store:
+            return Response({'message': 'Missing query params'}, status=status.HTTP_400_BAD_REQUEST)
+        product = Product.objects.get(name=product_to_restock)
+        # Remove the restock quantity!
+        from_store = ProductStock.objects.filter(product=product.id).get(store=from_store)
+        from_store.quantity -= int(quantity_to_restock)
+        from_store.save()
+        # Add the restock quantity!
+        to_store = ProductStock.objects.filter(product=product.id).get(store=to_store)
+        to_store.quantity += int(quantity_to_restock)
+        to_store.save()
+        return Response({'message': 'Restock Successfull!'})
+
 class AddStoreView(views.APIView):
     
     def post(self, request):             # Re-define to create store records!
-        storeNumber = request.query_params.get('storeNumber')
-        if not storeNumber:
+        store_number = request.query_params.get('storeNumber')
+        if not store_number:
             return Response('Provide the store number!', status=status.HTTP_400_BAD_REQUEST )
         data = list(map(
             lambda x: {
-                'store_no': storeNumber, 
+                'store_no': store_number, 
                 'product': Product.objects.get(name=x.split('$')[0]).id, 
                 'quantity': int(x.split('$')[1]),
             }, 

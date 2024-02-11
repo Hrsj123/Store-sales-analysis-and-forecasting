@@ -34,7 +34,7 @@ def add_product_data_weekly():
             continue
         
         # holiday week calculation:
-        holiday_flag = 1 if random.randint(0, 4) == 0 else 0    # (only 20% chance -> holiday_flah == 1)
+        holiday_flag = 1 if random.randint(0, 4) == 0 else 0    # (only 20% chance -> holiday_flag == 1)
 
         # save in walmartstore
         serializer = WalmartStoreSerializer(

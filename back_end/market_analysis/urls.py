@@ -11,5 +11,8 @@ urlpatterns = [
     path('compareStoresAvgWeeklySale/', StoreAvgWeeklySalesComparePlotView.as_view()),
     path('predictValue/', PredictView.as_view()),
     path('products/', ProductView.as_view()),
+    path('inventory/', ProductListView.as_view()),
+    path('restock/', RestockView.as_view()),
+    path('restock-set/', RestockSetView.as_view()),
     path('addSales/', AddStoreView.as_view()),
 ]
